@@ -13,23 +13,22 @@
     <script>
         d3.select('body')
             .append('p')
-            .text("New paragraph!");
+            .text("This is a paragraph!");
 
 
-        d3.csv("/data/ufo_sights.csv", function (error, data) {
-            if (error) {
+        d3.csv("/data/ufo_sights.csv", function (data, error) {
+           /*  if (error) {
                 console.log("error");
             }
-           // else {
+            else { */
 
-                for (var i = 0; i < 5; i++) {
+                for (var i = 0; i < 10; i++) {
                     console.log("hey")
 
-                    console.log(data[i].city);
+                    console.log(data.city);
                 } 
 
-          //  }
-
+            //}
 
         });
 
