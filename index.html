@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://d3js.org/d3.v6.min.js"></script>
+    <title>Projeto VI</title>
+
+</head>
+
+
+<body>
+    <script>
+        d3.select('body')
+            .append('p')
+            .text("New paragraph!");
+
+
+        d3.csv("/data/ufo_sights.csv", function (error, data) {
+            if (error) {
+                console.log("error");
+            }
+           // else {
+
+                for (var i = 0; i < 5; i++) {
+                    console.log("hey")
+
+                    console.log(data[i].city);
+                } 
+
+          //  }
+
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>
