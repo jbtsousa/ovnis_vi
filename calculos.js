@@ -85,6 +85,25 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
     console.log(freq_formas);
     console.log(freq_duracao);
 
+    let new_freqformas=[];
++    Object.keys(freq_formas).forEach(key => {
+        if(key=="cylinder" || key=="cigar"){
+            new_freqformas.cil = freq_formas["cylinder"] + freq_formas["cigar"];
+        }
+        else if (key=="circle" || key=="sphere" || key=="round"){
+            new_freqformas.circulo = freq_formas["circle"] + freq_formas["sphere"]+ freq_formas["round"];
+        }
+        else if (key=="flash" || key=="flare" || key=="light"){
+            new_freqformas.circulo = freq_formas["flash"] + freq_formas["flare"]+ freq_formas["light"];
+        }
+        else if (key=="flash" || key=="flare" || key=="light"){
+            new_freqformas.circulo = freq_formas["flash"] + freq_formas["flare"]+ freq_formas["light"];
+        }
+    })
+
+
+console.log(novo);
+
 
 /*CÁLCULO QUARTIS (das durações dos avistamentos)*/
     let duracoes = [];
@@ -101,9 +120,11 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
     console.log(p50);
     console.log(p75);
 }
-inc +=1;
+
 
 });
+
+
 
 
 
