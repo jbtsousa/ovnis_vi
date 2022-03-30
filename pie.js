@@ -8,12 +8,9 @@ d3.csv("/data/ufo_sights.csv").then(function (ufos) {
         .append("path")
         .attr("d", function (data) {
             arcGenerator({
-                startAngle: function (data) {
-                    return
-                },
+                startAngle: 8,
                 endAngle: 0.25 * Math.PI,
                 innerRadius:
-
     })
 
 
