@@ -21,7 +21,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         }
     });
 
-    /*DICIONÁRIO COM TODOS OS TEMPOS DE CADA FORMA E MIN E MAX */ 
+    /*DICIONÁRIO COM TODOS OS TEMPOS DE CADA FORMA E MIN E MAX */
     // !!PROBLEMA NO CIRCLE!!
     // !! AINDA TEM AS FORMAS TODAS REDUZIR PARA A LISTA DE MENOS FORMA
     var dict = {};
@@ -119,8 +119,50 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
 
 
 
+    /*TENTATIVA DE DESENHAR ARCOS*/
+    let teste = [0.5, 0.3];  //simula as frequencias relativas
+    //se há duas entradas, vai desenhar um path (supostamente) por entrada
+    var arcGenerator = d3.arc();
+
+    var svg = d3.select('#lol').append('svg')
+        .attr('width', 700)
+        .attr('height', 500)
+        .append('g') //tentar alterar posição do arco com o contentor g (resultou)
+        //.attr('width', 700)
+        //.attr('height', 500)
+        //.attr('translate',(300,110)) //tentar alterar a posição com transform >> translate mas não deu
+        .attr('transform', 'translate(230,300)');
+
+    svg.selectAll('path')
+        .data(teste) //dados aos quais vamos associar formas/paths
+        .enter()
+        .append('path')
+        .attr('d', function (d, i) {
+
+            //há diferenças entres estes dois "d". O primeiro, é o parâmetro que
+            //a forma "path" precisa de receber para ser desenhada.
+            //É a esse d que queremos atribuir a função dos arcos. O segundo d,
+            //é um parâmetro da função function() que representa o valor de
+            //uma entrada do dataset que estamos a receber (neste caso, teste).
+            //E o "i" é a posição no data set.
+
+            //a partir do data(teste), que tem duas entradas, os comandos enter
+            //append e attr vão correr em loop o número de vezes = número de entradas
+            //em data(teste). Neste caso, duas. Pelo que devia desenhar 2 arcos.
+
+            //PROBLEMA: Está a ser desenhado um arco com 0.5*2PI e outro com 0.3*2PI
+            //um em cima do outro. Site d3 depth, shapes, pie chart, serºa que ajuda????
+            return arcGenerator({
+
+                startAngle: 0,
+                endAngle: d * Math.PI * 2,
+                innerRadius: 50,
+                outerRadius: 150
+
+            })
 
 
+        })
 
 
 
