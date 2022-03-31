@@ -12,9 +12,9 @@
     let p50 = d3.quantile(duracoes, 0.5);
     let p75 = d3.quantile(duracoes, 0.75);
 
-    /*    console.log(duracoes);
+       console.log(duracoes);
        console.log(p25);
        console.log(p50);
-       console.log(p75); */
-    //}
-})
+       console.log(p75); 
+    }
+)
