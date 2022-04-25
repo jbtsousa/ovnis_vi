@@ -1,5 +1,7 @@
 d3.csv("/data/ufo_sights.csv").then(function (data) {
 
+    
+
     /*ARRAYS DAS FREQUÊNCIAS DAS FORMAS E DURAÇÕES*/
     let freq_duracao = [];
     data.forEach(function (d) {
@@ -20,7 +22,6 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             freq_formas[d.shape] = 1;
         }
     });
-
     /*DICIONÁRIO COM TODOS OS TEMPOS DE CADA FORMA */
     var dict = {};
 
@@ -36,8 +37,6 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         }
     })
     console.log(dict);
-
-
 
 
     //////////////////////////////////////////////////////////////////////////////////arrays padeiros

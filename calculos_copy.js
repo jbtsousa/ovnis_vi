@@ -1,7 +1,26 @@
+/* CALCULOS.JS SÓ QUE MAIS ORGANIZADO E LIMPO E SEM NENHUM DESENHO D3 */
 d3.csv("/data/ufo_sights.csv").then(function (data) {
 
+ ufo_data = data.reduce(function(ufo,d){
+    ufo[d.state]= ufo[d.state] || [];
+    ufo[d.state].push(d);
+
+ 
+    return ufo;
+}, Object.create(null));
+
+console.log(ufo_data);
+
+
+ Object.entries(ufo_data).forEach(entry=>{
+     const[key,value]=entry;
+    console.log (key,value);
+     console.log("_______")
+ })
+
+ 
     /*ARRAYS DAS FREQUÊNCIAS DAS FORMAS E DURAÇÕES*/
-    let freq_duracao = [];
+   /*  let freq_duracao = [];
     data.forEach(function (d) {
         if (freq_duracao[d.duration]) {
             freq_duracao[d.duration] += 1;
@@ -9,7 +28,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         else {
             freq_duracao[d.duration] = 1;
         }
-    });
+    }); */
 
     let freq_formas = [];
     data.forEach(function (d) {
@@ -20,6 +39,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             freq_formas[d.shape] = 1;
         }
     });
+
 
     /*DICIONÁRIO COM TODOS OS TEMPOS DE CADA FORMA */
     var tempos = {};
@@ -35,9 +55,6 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             }
         }
     })
-    console.log(tempos);
-
-
 
 
     /*NOVO ARRAY COM FORMAS AGRUPADAS e DADOS NECESSARIOS PARA ENVIAR PARA GRÁFICO*/
@@ -101,6 +118,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
     });
 
 
+
     /*SOMATÓRIO TODOS AVISTAMENTOS*/
     let sum = 0;
     let abs = []
@@ -126,254 +144,14 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             abs: new_freqformas[chave]["abs"],
             pp: new_freqformas[chave]["pp"],
             tempos: new_freqformas[chave]["tempos"]
+
         })
-
-
-
     })
 
-
-
-
-    console.log(new_freqformas);
-
-    console.log("new_data")
     console.log(new_data);
 
 
-    //margem entre fatias da tarte
-    let margem = 0.008 * Math.PI * 2;
-
-    //espessura linhas. PROBLEMA: está a ser aplicada uma escala logarítmica a este valor
-    var espess = 0.6;
-
-    var arcGenerator = d3.arc();
-    var eixoRadial = d3.scaleLog().domain([0.01, 9900]).range([30, 200]);
-
-    //testando
-    //console.log("oi");
-    //console.log(eixoRadial(0.01));
-
-    var svg = d3.select('#lol').append('svg')
-        .attr('width', '100vw')
-        .attr('height', '100vh')
-        .append('g') //tentar alterar posição do arco com o contentor g (resultou)
-        .attr('width', '100vw')
-        .attr('height', '100vh')
-        .attr('transform', 'translate(500,500)');
-
-    ////////////////////////////////////////////////////////////////////////////////////////CHANGE
-    svg.selectAll('path')
-        .data(arr_teste_change) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-            return arcGenerator({
-                startAngle: 0,
-                endAngle: 0.025038265306122447 * Math.PI * 2,
-                /*innerRadius: d.tmp,
-                outerRadius: d.tmp+2*/
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "green")
-
-
-    /*.style("fill", function(d,i){
-      if(d<30){
-        return "black";
-      }else if(d>=30 || d<60*3){
-          return "green";
-      }else if (d>=60*3 || d<60*10){
-          return "yellow";
-      }else{
-        return"red";
-      }
-    });*/
-
-    ////////////////////////////////////////////////////////////////////////////////////////CIL
-    svg.selectAll('path')
-        .data(arr_teste_cil) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-            return arcGenerator({
-                startAngle: 0.025038265306122447 * Math.PI * 2,
-                endAngle: 0.025038265306122447 * Math.PI * 2 + 0.04260204081632653 * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-
-        .style("fill", "pink")
-
-    ////////////////////////////////////////////////////////////////////////////////////////CIRCULO
-    svg.selectAll('path')
-        .data(arr_teste_cir) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: 0.025038265306122447 * Math.PI * 2 + 0.04260204081632653 * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "blue")
-
-    /*.style("fill", function(d,i){
-        if(d<30){
-          return "black";
-        }else if(d>=30 || d<60*3){
-            return "green";
-        }else if (d>=60*3 || d<60*10){
-            return "yellow";
-        }else{
-          return"red";
-        }
-      });*/
-
-    ///////////////////////////////////////////////////////////////////////////////////////DESCONHECIDO
-
-    svg.selectAll('path')
-        .data(arr_teste_desconhecido) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "violet")
-
-    ////////////////////////////////////////////////////////////////////////////////////////DIAMOND
-
-    svg.selectAll('path')
-        .data(arr_teste_diamond) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "orange")
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////ELLIPSE
-
-    svg.selectAll('path')
-        .data(arr_teste_elipse) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "purple")
-
-    ////////////////////////////////////////////////////////////////////////////////////////FIREBALL
-    svg.selectAll('path')
-        .data(arr_teste_fireball) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "red")
-
-    ////////////////////////////////////////////////////////////////////////////////////////FORMATION
-
-    svg.selectAll('path')
-        .data(arr_teste_formation) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "brown")
-
-    ////////////////////////////////////////////////////////////////////////////////////////LUZ
-
-    svg.selectAll('path')
-        .data(arr_teste_luz) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "black")
-
-    ////////////////////////////////////////////////////////////////////////////////////////OUTRO
-
-    svg.selectAll('path')
-        .data(arr_teste_outro) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735 + 0.08868622448979592) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "blue")
-
-    ////////////////////////////////////////////////////////////////////////////////////////RECT
-
-    svg.selectAll('path')
-        .data(arr_teste_rect) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735 + 0.08868622448979592) * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735 + 0.08868622448979592 + 0.016543367346938776) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "blue")
-
-    ////////////////////////////////////////////////////////////////////////////////////////TRIANG
-    svg.selectAll('path')
-        .data(arr_teste_triang) //dados aos quais vamos associar formas/paths
-        .enter()
-        .append('path').attr('d', function (d, i) {
-
-            return arcGenerator({
-                startAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735 + 0.08868622448979592) + 0.016543367346938776 * Math.PI * 2,
-                endAngle: (0.025038265306122447 + 0.04260204081632653 + 0.1657780612244898 + 0.07122448979591836 + 0.015025510204081632 + 0.12378826530612246 + 0.07918367346938776 + 0.031339285714285715 + 0.22823979591836735 + 0.08868622448979592 + 0.016543367346938776 + 0.11255102040816327) * Math.PI * 2,
-                innerRadius: eixoRadial(d),
-                outerRadius: eixoRadial(d) + espess
-            })
-        })
-        .style("fill", "blue");
+ 
 
 
 });
