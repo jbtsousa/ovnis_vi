@@ -1,4 +1,4 @@
-/*** AQUI VAI SER TUDO O QUE FOI FEITO NO CALCULOS_COPY MAS DIVIDIDO POR ESTADO ***/
+/*** INFORMAÇÃO DIVIDIDA POR ESTADO ***/
 
 d3.csv("/data/ufo_sights.csv").then(function (data) {
 
@@ -65,7 +65,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
           //console.log(new_freqformas);
   
 
-        /*** POR INFORMAÇÃO DE FORMA A ESTAR PRONTA A SER RECEBIDA PELO D3 */
+        /*** INFORMAÇÃO DE FORMA A ESTAR PRONTA A SER RECEBIDA PELO D3 */
         let new_ufo_data = {};
         new_ufo_data[key] = [];
         //agora estamos a usar as formas todas (não as 12), pq o new_freqformas não está bem
@@ -82,9 +82,9 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
 
         /******* DESENHO DO GRÁFICO *******/
 
-        var width = 800;
-        var height = 800;
-        var radius = 400;
+        var width = 600;
+        var height = 600;
+        var radius = 300;
 
         //aqui estamos só a fazer com um estado
         var pieData = new_ufo_data["ab"]
@@ -98,7 +98,6 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         var arc = d3.arc()
             .innerRadius(30)
             .outerRadius(radius)
-            .cornerRadius(3)
             .padAngle(1)
             .padRadius(2);
 
@@ -116,6 +115,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         var slices = d3.selectAll('g.slice')
             .append('path')
             .attr('d', arc)
+            .attr('fill','#ED1BBF');
 
 
         var text = d3.selectAll('g.slice')

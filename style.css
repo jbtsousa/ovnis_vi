@@ -1,9 +1,22 @@
-/* path{
-    fill:orange;
-    stroke:black;
-} */
-
-g{
-    height: 200h;
-    width:100w;
+body{
+    background-color: #05033e;
+    background-image: url('img/estrelinhas.png');
+    background-size: contain;
+    background-repeat: repeat;
+    height:95vh;
+    width: 100vw;
 }
+header{
+    width:100vw;
+    display: flex;
+    justify-content: center;
+}
+header h1{
+    font-family: Monaco;
+    background-color: white;
+    display: inline-block;
+    padding: 1% 2%;
+    text-align: center;
+}
+
+
