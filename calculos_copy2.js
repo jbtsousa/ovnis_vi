@@ -99,7 +99,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             })
         })
 
-        //console.log(new_ufo_data);
+        console.log(new_ufo_data);
 
 
         /******* DESENHO DO GRÁFICO - Evgheni  *******/
@@ -149,6 +149,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         var slices = chart.selectAll('g.slice') //substituição de d3 por chart porque assim vai buscar dados ao data joint e não antes de fazer join, iu seja, html, sem dados agarrados
             .data((sector) => {
                 //console.log("sector:",sector);
+                
                 //exemplo do prof do q devia dar [{q: 1000, dur: 10}, { q: 1000, dur: 60}, 1000, 1000, 10]
                 //var avistamentos = avistamentos(sector.dados);
                 //FALTA FUNÇÃO DE AVISTAMENTOS
