@@ -9,9 +9,9 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         return ufo;
     }, Object.create(null));
 
-    console.log(ufo_data);
+    //console.log(ufo_data);
 
-    /*** FREQUÊNCIA DE AVISTAMENTOS POR FORMA ***/
+    /*** FREQUÊNCIA DE AVISTAMENTOS POR FORMA POR ESTADO ***/
 
     Object.entries(ufo_data).forEach(entry => {
         const [key, value] = entry;
@@ -36,8 +36,10 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         data.forEach(function (d) {
             tempos[d.shape] = [];
         });
+        
+      
         //console.log(tempos);
-
+        //console.log(freq_formas);
 
 
         /*** NOVO ARRAY COM FORMAS AGRUPADAS e DADOS NECESSARIOS PARA ENVIAR PARA GRÁFICO ***/
@@ -83,6 +85,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             }
         })
 
+        //console.log(tempos);
 
         /*** INFORMAÇÃO DE FORMA A ESTAR PRONTA A SER RECEBIDA PELO D3 */
         let new_ufo_data = {};
@@ -96,7 +99,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             })
         })
 
-        console.log(new_ufo_data);
+        //console.log(new_ufo_data);
 
 
         /******* DESENHO DO GRÁFICO - Evgheni  *******/
@@ -121,6 +124,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             .padRadius(2);
 
         //let cor= xxx
+        //função que define forma como cor é dada?
 
 
         let band = d3.scaleBand();
@@ -139,38 +143,60 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
 
             }))
             .enter()
-            .append('g')
+            .append('g') //para cada setor um g, para cada abs
             .attr('class', 'slice');
 
-        var slices = d3.selectAll('g.slice')
+        var slices = chart.selectAll('g.slice') //substituição de d3 por chart porque assim vai buscar dados ao data joint e não antes de fazer join, iu seja, html, sem dados agarrados
             .data((sector) => {
-                console.log(sector); //erro aqui 
+                //console.log("sector:",sector);
                 //exemplo do prof do q devia dar [{q: 1000, dur: 10}, { q: 1000, dur: 60}, 1000, 1000, 10]
-                var avistamentos = avistamentos(sector.dados);
+                //var avistamentos = avistamentos(sector.dados);
+                //FALTA FUNÇÃO DE AVISTAMENTOS
+                //esta que pus a seguir foi introduzida na aula:
+                var avistamentos = sector.data.tempos;
+                //console.log("avist:", avistamentos);
                 band.domain(avistamentos)
-                    .range(rangeAvistamentos(avistamentos.length)) // 10 => {20 }
+                .range([10,300])
+                    //.range(rangeAvistamentos(avistamentos.length)) // 10 => {20 }
                 return {
-                    inner: band(sector.dados),
-                    outer: band(sector.dados) + band.bandWidth(),
-                    cor: cor(avistamentos),
-                    angInf: sector.pie.startAngle,
-                    angSup: sector.pie.endAngle,
+                    inner: band(sector.avistamentos),
+                    outer: band(sector.data) + band.bandwidth(),
+                    //cor: cor(avistamentos), //depois impor regra para cor
+                    angInf: sector.startAngle,
+                    angSup: sector.endAngle,
                     dados: sector.dados
                 }
+                
+                
             })
+            
             .enter()
             .append('g')
             .attr('class', 'arc')
             .attr('fill', '#0FF285');
 
-        let arco = d3.selectAll('g.slice.arc')
-            .append('path')
-            .attr('d', (barra) => {
-                arc.innerRadius(barra.inner).outerRadius(barra.outer).startAngle(barra.startAngle).endAngle(barra.endAngle)
+        let arco = slices.selectAll('g.arc') //aqui vamos buscar o joint anterior que criou mais dados importantes para aqui
+            .data(function(dados){
+                console.log("dados:",dados);
+                return dados;
             })
-            .attr('fill', (d) => d.cor)
+            .enter()
+            .append('path')
+        
+            .attr('d', (barra) => {
+
+                //console.log("barra:", barra);
+                arc.innerRadius(barra.inner)
+                .outerRadius(barra.outer)
+                .startAngle(barra.startAngle)
+                .endAngle(barra.endAngle)
+            })
+            .attr('fill','#F5F5F5');
+            //.attr('fill', (d) => d.cor)
+
 
         /******* DESENHO DO GRÁFICO - Eu  *******/
+
 
 /*               var width = 600;
               var height = 600;
