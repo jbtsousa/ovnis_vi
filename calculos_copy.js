@@ -14,8 +14,8 @@ console.log(ufo_data);
 
  Object.entries(ufo_data).forEach(entry=>{
      const[key,value]=entry;
-    console.log (key,value);
-     console.log("_______")
+    //console.log (key,value);
+     //console.log("_______")
  })
 
  
@@ -31,7 +31,10 @@ console.log(ufo_data);
     }); */
 
     let freq_formas = [];
+    console.log(freq_formas);
+
     data.forEach(function (d) {
+
         if (freq_formas[d.shape]) {
             freq_formas[d.shape] += 1;
         }
@@ -41,12 +44,14 @@ console.log(ufo_data);
     });
 
 
+
     /*DICIONÁRIO COM TODOS OS TEMPOS DE CADA FORMA */
     var tempos = {};
 
     data.forEach(function (d) {
         tempos[d.shape] = [];
     });
+    console.log(freq_formas);
 
     Object.keys(tempos).forEach(key_forma => {
         for (var i = 0; i < data.length; i++) {
@@ -55,7 +60,6 @@ console.log(ufo_data);
             }
         }
     })
-
 
     /*NOVO ARRAY COM FORMAS AGRUPADAS e DADOS NECESSARIOS PARA ENVIAR PARA GRÁFICO*/
     let new_freqformas = {};

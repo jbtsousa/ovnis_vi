@@ -1,7 +1,5 @@
 d3.csv("/data/ufo_sights.csv").then(function (data) {
 
-    
-
     /*ARRAYS DAS FREQUÊNCIAS DAS FORMAS E DURAÇÕES*/
     let freq_duracao = [];
     data.forEach(function (d) {
