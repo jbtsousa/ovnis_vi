@@ -87,7 +87,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
     });
 
     //console.log('freq_formas por estado');
-    //console.log(freq_formas);
+    console.log(freq_formas);
     
     //console.log('tempos por formas por estado');
     //console.log(tempos);
@@ -109,6 +109,7 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             .value(function (d) {
                 return d.frequencia;
             })
+
 
         var arc = d3.arc()
             .innerRadius(30)
@@ -139,16 +140,21 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         .append('g') //para cada setor um g, para cada abs
         .attr('class', 'slice');
 
+
+
         var slices = chart.selectAll('g.slice') //substituição de d3 por chart porque assim vai buscar dados ao data joint e não antes de fazer join, iu seja, html, sem dados agarrados
         .data((sector) => {
-            console.log("sector:",sector);
+            //console.log("sector:",sector);
             
             //exemplo do prof do q devia dar [{q: 1000, dur: 10}, { q: 1000, dur: 60}, 1000, 1000, 10]
             //var avistamentos = avistamentos(sector.dados);
             //FALTA FUNÇÃO DE AVISTAMENTOS
             //esta que pus a seguir foi introduzida na aula:
-            var avistamentos = sector.data.tempos;
+            var avistamentos = sector.data.tempos; //organizado por ordem das formas i.e por setor
+            //var formass = sector.data.forma;
             //console.log("avist:", avistamentos);
+            //console.log("formass:", formass);
+      
             band.domain(avistamentos)
             .range([10,300])
                 //.range(rangeAvistamentos(avistamentos.length)) // 10 => {20 }
@@ -182,7 +188,8 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
 
             //ESTE CONSOLE LOG NÃO CORRE
             //console.log("barra:", barra);
-            arc.innerRadius(barra.inner)
+            arc.
+            innerRadius(barra.inner)
             .outerRadius(barra.outer)
             .startAngle(barra.startAngle)
             .endAngle(barra.endAngle)
