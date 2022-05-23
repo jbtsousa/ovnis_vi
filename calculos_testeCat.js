@@ -102,7 +102,8 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
      //var thickness = 15;
  
      //aqui estamos só a fazer com um estado
-     var pieData = new_ufo_data["ab"]
+     //isolar isto tudo numa função e depois chamar de acordo com o id do estado
+     var pieData = new_ufo_data["ab"] 
  
      var pie = d3.pie()
              .value(function (d) {
@@ -121,10 +122,22 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
  
  
          let scaleX = d3.scaleLinear();
+
+         //antes do chart>slice>arc acresentar secção que tem input o estado
+         //tratr das posiç~eos dos graficos. no inicio por random
  
          var chart = d3.select('#chart').append('svg')
          .attr('width', width)
          .attr('height', height)
+
+         /*function(chart,estado){ --> função com tudo
+            chart.append('g')
+            .attr("id", estado)
+            ... //a partir daqui repetir todo o código que esta para baixo
+
+      
+         }*/
+
          .append('g')
          .attr('transform', 'translate(' + (width - radius) + ',' + (height - radius) + ')')
          .selectAll('path')
@@ -147,31 +160,31 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
              
              var navistamentos =[20,50,54,59]; //se for acumulativo ou seja 20, 30, 4, 5
              var max = 200;
+             var margem = 8;
        
              scaleX.domain([0,max])
              .range([30,300])
 
-             return {
+             return [{
                  inner: 30,
-                 outer: scaleX(data),
+                 //margem + scaleX(data), //MAS O ANTERIOR
+                 outer: 100,
                  angInf: sector.startAngle,
                  angSup: sector.endAngle,
                  dados: sector.dados
-             }
-             
-             
+             }]  //d3 trabalha com array e nao objetos
          })
-         
          .enter()
          .append('g')
          .attr('class', 'arc')
-         //.attr('fill', '#0FF285');
- 
+         .attr('fill', '#0FF285');
+         //console.log(slices.selectAll('g.arc'));
+
      let arco = slices.selectAll('g.arc') //aqui vamos buscar o joint anterior que criou mais dados importantes para aqui
          .data(function(dados){
              //ESTE CONSOLE LOG NÃO CORRE
-             console.log("dados:",dados);
-             return dados;
+             //console.log("dados:",dados);
+             return [dados];
          })
          .enter()
          .append('path')
