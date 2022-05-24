@@ -66,23 +66,23 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         var interv1, interv2, interv3, interv4;
         for (var i = 0; i < arr_shapes.length; i++) {
 
-             Object.entries(new_ufo_data).forEach(([estado, avist]) => {
+            Object.entries(new_ufo_data).forEach(([estado, avist]) => {
                 for (var i = 0; i < avist["frequencia"]; i++) {
 
                     if (avist["tempos"][i] >= 1 && avist["tempos"][i] < 30) {
-                        interv1+=1;
+                        interv1 += 1;
                     }
                     else if (avist["tempos"][i] >= 30 && avist["tempos"][i] < 180) {
-                         interv2+=1;
+                        interv2 += 1;
                     }
                     else if (avist["tempos"][i] >= 180 && avist["tempos"][i] < 600) {
-                         interv3+=1;
+                        interv3 += 1;
                     }
                     else if (avist["tempos"][i] >= 600) {
-                        interv4+=1;
+                        interv4 += 1;
                     }
                 }
-            }); 
+            });
 
 
             /***calculo auxiliar intervalos tempos por estado por forma** */
@@ -134,30 +134,19 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
             })
         });
 
-<<<<<<< HEAD
+        
 
-=======
-    //console.log('freq_formas por estado');
-    console.log(freq_formas);
-    
-    //console.log('tempos por formas por estado');
-    //console.log(tempos);
+        /******* DESENHO DO GRÁFICO - Evgheni  *******/
 
-    //console.log("new ufo_data")
-    console.log(new_ufo_data);
->>>>>>> a026d30d2ac909c67d08282c0698ccc42d8842fb
+        var width = 600;
+        var height = 600;
+        var radius = 300;
+        var thickness = 15;
 
-    /******* DESENHO DO GRÁFICO - Evgheni  *******/
+        //aqui estamos só a fazer com um estado
+        var pieData = new_ufo_data["ab"]
 
-    var width = 600;
-    var height = 600;
-    var radius = 300;
-    var thickness = 15;
-
-    //aqui estamos só a fazer com um estado
-    var pieData = new_ufo_data["ab"]
-
-    var pie = d3.pie()
+        var pie = d3.pie()
             .value(function (d) {
                 return d.frequencia;
             })
@@ -176,77 +165,77 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
         let band = d3.scaleBand();
 
         var chart = d3.select('#chart').append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', 'translate(' + (width - radius) + ',' + (height - radius) + ')')
-        .selectAll('path')
-        .data(pie(pieData, (d) => {
-            return {
-                pie: pie(d),
-                dados: d
-            }
+            .attr('width', width)
+            .attr('height', height)
+            .append('g')
+            .attr('transform', 'translate(' + (width - radius) + ',' + (height - radius) + ')')
+            .selectAll('path')
+            .data(pie(pieData, (d) => {
+                return {
+                    pie: pie(d),
+                    dados: d
+                }
 
-        }))
-        .enter()
-        .append('g') //para cada setor um g, para cada abs
-        .attr('class', 'slice');
+            }))
+            .enter()
+            .append('g') //para cada setor um g, para cada abs
+            .attr('class', 'slice');
 
 
 
         var slices = chart.selectAll('g.slice') //substituição de d3 por chart porque assim vai buscar dados ao data joint e não antes de fazer join, iu seja, html, sem dados agarrados
-        .data((sector) => {
-            //console.log("sector:",sector);
-            
-            //exemplo do prof do q devia dar [{q: 1000, dur: 10}, { q: 1000, dur: 60}, 1000, 1000, 10]
-            //var avistamentos = avistamentos(sector.dados);
-            //FALTA FUNÇÃO DE AVISTAMENTOS
-            //esta que pus a seguir foi introduzida na aula:
-            var avistamentos = sector.data.tempos; //organizado por ordem das formas i.e por setor
-            //var formass = sector.data.forma;
-            //console.log("avist:", avistamentos);
-            //console.log("formass:", formass);
-      
-            band.domain(avistamentos)
-            .range([10,300])
+            .data((sector) => {
+                //console.log("sector:",sector);
+
+                //exemplo do prof do q devia dar [{q: 1000, dur: 10}, { q: 1000, dur: 60}, 1000, 1000, 10]
+                //var avistamentos = avistamentos(sector.dados);
+                //FALTA FUNÇÃO DE AVISTAMENTOS
+                //esta que pus a seguir foi introduzida na aula:
+                var avistamentos = sector.data.tempos; //organizado por ordem das formas i.e por setor
+                //var formass = sector.data.forma;
+                //console.log("avist:", avistamentos);
+                //console.log("formass:", formass);
+
+                band.domain(avistamentos)
+                    .range([10, 300])
                 //.range(rangeAvistamentos(avistamentos.length)) // 10 => {20 }
-            return {
-                inner: band(sector.avistamentos),
-                outer: band(sector.data) + band.bandwidth(),
-                //cor: cor(avistamentos), //depois impor regra para cor
-                angInf: sector.startAngle,
-                angSup: sector.endAngle,
-                dados: sector.dados
-            }
-            
-            
-        })
-        
-        .enter()
-        .append('g')
-        .attr('class', 'arc')
-        .attr('fill', '#0FF285');
+                return {
+                    inner: band(sector.avistamentos),
+                    outer: band(sector.data) + band.bandwidth(),
+                    //cor: cor(avistamentos), //depois impor regra para cor
+                    angInf: sector.startAngle,
+                    angSup: sector.endAngle,
+                    dados: sector.dados
+                }
 
-    let arco = slices.selectAll('g.arc') //aqui vamos buscar o joint anterior que criou mais dados importantes para aqui
-        .data(function(dados){
-            //ESTE CONSOLE LOG NÃO CORRE
-            //console.log("dados:",dados);
-            return dados;
-        })
-        .enter()
-        .append('path')
-    
-        .attr('d', (barra) => {
 
-            //ESTE CONSOLE LOG NÃO CORRE
-            //console.log("barra:", barra);
-            arc.
-            innerRadius(barra.inner)
-            .outerRadius(barra.outer)
-            .startAngle(barra.startAngle)
-            .endAngle(barra.endAngle)
-        })
-        .attr('fill','#F5F5F5');
+            })
+
+            .enter()
+            .append('g')
+            .attr('class', 'arc')
+            .attr('fill', '#0FF285');
+
+        let arco = slices.selectAll('g.arc') //aqui vamos buscar o joint anterior que criou mais dados importantes para aqui
+            .data(function (dados) {
+                //ESTE CONSOLE LOG NÃO CORRE
+                //console.log("dados:",dados);
+                return dados;
+            })
+            .enter()
+            .append('path')
+
+            .attr('d', (barra) => {
+
+                //ESTE CONSOLE LOG NÃO CORRE
+                //console.log("barra:", barra);
+                arc.
+                    innerRadius(barra.inner)
+                    .outerRadius(barra.outer)
+                    .startAngle(barra.startAngle)
+                    .endAngle(barra.endAngle)
+            })
+            .attr('fill', '#F5F5F5');
 
         /******* DESENHO DO GRÁFICO - Evgheni  *******/
         var width = 600;
@@ -339,6 +328,5 @@ d3.csv("/data/ufo_sights.csv").then(function (data) {
     console.log("new ufo_data")
     console.log(new_ufo_data);
     console.log(interv_tempo_aux);
-
 
 });
